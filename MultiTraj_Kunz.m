@@ -6,10 +6,10 @@ r1=0.5; %rate of growth
 g1=10; %rate of decay
 Ntot=1000;%total number of available monomers
 MaxS=200000; %max steps
-t1=100; %get out at this time
+t1=2500; %get out at this time
 MaxTraj=1000; %number of trajectories
-p1= zeros(1, MaxS*MaxTraj); %probability
-p2 = zeros(1, MaxS*MaxTraj);
+p1= zeros(1, MaxS); %probability
+p2 = zeros(1, MaxS);
 figure;
 for j=1:MaxTraj
     
@@ -35,8 +35,9 @@ for j=1:MaxTraj
         T(i+1)= T(i)+tau(i);
         % Determine reaction
         CoinFlip2=rand;
+        CoinFlip3=rand;
         if CoinFlip2<=k1/k0
-            if mod(CoinFlip2, 2) == 0
+            if CoinFlip3 >= .5
                 m1(i+1)=m1(i)+1;
                 m2(i+1) = m2(i);
                 monomers=monomers-1;
@@ -46,11 +47,11 @@ for j=1:MaxTraj
                 monomers = monomers-1;
             end
         else
-            if m1(i)==1 && m2(i) ~= 1
+            if CoinFlip3 >= .5 && m2(i) >= 1
                 m1(i+1) = m1(i);
                 m2(i+1) = m2(i)-1;
                 monomers = monomers+1;
-            elseif m1(i) ~= 1 && m2(i)==1
+            elseif m1(i) >= 1
                 m1(i+1) = m1(i)-1;
                 m2(i+1) = m2(i);
                 monomers = monomers+1;
@@ -73,7 +74,7 @@ legend('Polymer 1', 'Polymer 2')
 
 p1 = p1/sum(p1);
 p2 = p2/sum(p2);
-x = 1:1:Ntot;
+x = 1:1:MaxS;
 Avg= sum(x.*p1);
 variance= sum((x.^2).*p1)-(sum(x.*p1))^2;
 

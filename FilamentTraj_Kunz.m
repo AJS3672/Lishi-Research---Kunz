@@ -39,10 +39,10 @@ for k = 1:length(times)
                 monomers=monomers-1;
             else
                 if m1(i)==1
-                m1(i+1)= m1(i);
+                    m1(i+1)= m1(i);
                 else
-                m1(i+1)=m1(i)-1;
-                monomers=monomers+1;
+                    m1(i+1)=m1(i)-1;
+                    monomers=monomers+1;
                 end
             end
 
