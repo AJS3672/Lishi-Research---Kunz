@@ -19,14 +19,15 @@ for j=1:MaxTraj
     m2(1) = 1;
     monomers=Ntot;
     T=zeros(1,MaxS);
-    T(1)=0;
     
     for i=1:MaxS
         
-        k1=r1*(monomers-m1(1)-m2(1));
+        k1=r1*(monomers-m1(1));
         k2=g1;
+        k3 = r1*(monomers-m2(1));
+        k4=g1;
         
-        k0=k1+k2;
+        k0=k1+k2+k3+k4;
         
         % Determine time spent
         CoinFlip1=rand;
@@ -35,27 +36,22 @@ for j=1:MaxTraj
         T(i+1)= T(i)+tau(i);
         % Determine reaction
         CoinFlip2=rand;
-        CoinFlip3=rand;
-        if CoinFlip2<=k1/k0
-            if CoinFlip3 >= .5
-                m1(i+1)=m1(i)+1;
-                m2(i+1) = m2(i);
-                monomers=monomers-1;
-            else
-                m1(i+1) = m1(i);
-                m2(i+1) = m2(i)+1;
-                monomers = monomers-1;
-            end
+        if CoinFlip2 <= k1/k0
+            m1(i+1) = m1(i) + 1;
+            m2(i+1) = m2(i);
+            monomers = monomers-1;
+        elseif CoinFlip2 <= (k1+k2) / k0
+            m1(i+1) = m1(i) - 1;
+            m2(i+1) = m2(i);
+            monomers = monomers+1;
+        elseif CoinFlip2 <= (k1+k2+k3) / k0
+            m2(i+1) = m2(i) + 1;
+            m1(i+1) = m1(i);
+            monomers = monomers-1;
         else
-            if CoinFlip3 >= .5 && m2(i) >= 1
-                m1(i+1) = m1(i);
-                m2(i+1) = m2(i)-1;
-                monomers = monomers+1;
-            elseif m1(i) >= 1
-                m1(i+1) = m1(i)-1;
-                m2(i+1) = m2(i);
-                monomers = monomers+1;
-            end
+            m2(i+1) = m2(i) - 1;
+            m1(i+1) = m1(i);
+            monomers = monomers+1;
         end
      
         if T(i+1)>=t1
