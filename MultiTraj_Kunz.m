@@ -5,8 +5,8 @@
 r1=0.5; %rate of growth
 g1=10; %rate of decay
 Ntot=1000;%total number of available monomers
-MaxS=200000; %max steps
-t1=2500; %get out at this time
+MaxS=400000; %max steps
+t1=5000; %get out at this time
 MaxTraj=1000; %number of trajectories
 p1= zeros(1, MaxS); %probability
 p2 = zeros(1, MaxS);
@@ -23,9 +23,17 @@ for j=1:MaxTraj
     for i=1:MaxS
         
         k1=r1*(monomers-m1(1));
-        k2=g1;
+        if m1(i) == 1
+            k2=0;
+        else
+            k2=g1;
+        end
         k3 = r1*(monomers-m2(1));
-        k4=g1;
+        if m2(i) == 1
+            k4=0;
+        else
+            k4=g1;
+        end
         
         k0=k1+k2+k3+k4;
         

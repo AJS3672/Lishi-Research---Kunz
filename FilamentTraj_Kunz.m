@@ -23,7 +23,11 @@ for k = 1:length(times)
         for i=1:MaxS
         
             k1=r1*(monomers-m1(1));
-            k2=g1;
+            if m1(i) == 1
+                k2=0;
+            else
+                k2=g1;
+            end
         
             k0=k1+k2;
         
